@@ -1,13 +1,12 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 <P>
 <H2>Find Owners:</H2>
-<spring:bind path="command">
+<i21:bind path="command">
   <FONT color="red">
     <B><c:out value="${status.errorMessage}"/></B>
   </FONT>
-</spring:bind>
+</i21:bind>
 <P>
 <FORM method="POST">
   <jsp:include page="/WEB-INF/jsp/fields/lastName.jsp"/>
@@ -15,8 +14,7 @@
 </FORM>
 <P>
 <BR>
-<A href="<c:url value="/addOwner.htm"/>">Add Owner</A>
+<A href="<c:url value="addOwner.htm"/>">Add Owner</A>
 <P>
 <BR>
-
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>
+<A href="<c:url value="welcome.htm"/>">Home</A>

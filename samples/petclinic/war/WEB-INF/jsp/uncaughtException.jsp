@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 <H2>Internal error</H2>
 <P>
@@ -25,15 +24,15 @@ try {
 		}
 	} 
 	else  {
-    	out.println("No error information available");
+    out.println("No error information available");
 	} 
 
 	// Display cookies
 	out.println("\nCookies:\n");
 	Cookie[] cookies = request.getCookies();
 	if (cookies != null) {
-    	for (int i = 0; i < cookies.length; i++) {
-      		out.println(cookies[i].getName() + "=[" + cookies[i].getValue() + "]");
+    for (int i = 0; i < cookies.length; i++) {
+      out.println(cookies[i].getName() + "=[" + cookies[i].getValue() + "]");
 		}
 	}
 	    
@@ -44,6 +43,6 @@ try {
 
 <P>
 <BR>
+<A href="<c:url value="welcome.htm"/>">Home</A>
 
 
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>
