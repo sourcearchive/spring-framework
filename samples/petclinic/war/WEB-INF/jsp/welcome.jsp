@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 <H2><fmt:message key="welcome"/></H2>
 <P>
@@ -11,4 +10,3 @@
 <P>
 <A href="<c:url value="/docs/index.html"/>">Documentation</A>
 
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>

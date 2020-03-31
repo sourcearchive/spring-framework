@@ -6,15 +6,17 @@
 
 	<property name="war.dir" value="war"/>
 	<property name="src.dir" value="src"/>
+	<property name="lib.dir" value="lib"/>
 	<property name="build.dir" value=".classes"/>
 	<property name="docs.dir" value="${war.dir}/docs"/>
 	<property name="weblib.dir" value="${war.dir}/WEB-INF/lib"/>
 	<property name="dist.dir" value="dist"/>
 	<property name="db.dir" value="db"/>
 
-	<property name="testsrc.dir" value="test"/>
-	<property name="testbuild.dir" value=".testclasses"/>
-	<property name="testreports.dir" value="junit-reports"/>
+	<property name="test.dir" value="test"/>
+	<property name="testsrc.dir" value="${test.dir}/src"/>
+	<property name="testbuild.dir" value="${test.dir}/.classes"/>
+	<property name="testreports.dir" value="${test.dir}/reports"/>
 	<property name="testhtml.dir" value="${testreports.dir}/html"/>
 
 	<property name="spring.root" value="../.."/>
@@ -24,61 +26,27 @@
 
 	<path id="master-classpath">
 
-		<fileset dir="${spring.root}/lib/hibernate">
-			<include name="hibernate2.jar"/>
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="${spring.root}/lib/jakarta-commons">
+		<fileset dir="${spring.root}/lib/j2ee">
+			<include name="servlet.jar"/>
+			<include name="jdbc2_0-stdext.jar"/>
+		</fileset>
+		<fileset dir="${spring.root}/lib/log4j">
 			<include name="commons-logging.jar"/>
 		</fileset>
-		<fileset dir="${spring.root}/lib/j2ee">
-			<include name="jdbc2_0-stdext.jar"/>
-			<include name="servlet.jar"/>
-		</fileset>
 		<fileset dir="${spring.root}/dist">
-			<include name="spring.jar"/>
+			<include name="spring-full*.jar"/>
 		</fileset>
 
-	</path>
-
-
-	<path id="test-classpath">
-
-		<fileset dir="${db.dir}/mysql">
-			<include name="mysql*.jar"/>
-		</fileset>
-		<fileset dir="${spring.root}/lib/aopalliance">
-			<include name="aopalliance.jar"/>
-		</fileset>
-		<fileset dir="${spring.root}/lib/cglib">
-			<include name="asm.jar"/>
-			<include name="cglib*.jar"/>
-		</fileset>
-		<fileset dir="${spring.root}/lib/dom4j">
-			<include name="dom4j.jar"/>
-		</fileset>
-		<fileset dir="${spring.root}/lib/hsqldb">
-			<include name="hsqldb.jar"/>
-		</fileset>
-		<fileset dir="${spring.root}/lib/hibernate">
-			<include name="ehcache.jar"/>
-			<include name="odmg.jar"/>
-		</fileset>
-		<fileset dir="${spring.root}/lib/j2ee">
-			<include name="jdbc2_0-stdext.jar"/>
-			<include name="jta.jar"/>
-			<include name="servlet.jar"/>
-		</fileset>
-		<fileset dir="${spring.root}/lib/jakarta-commons">
-			<include name="commons-collections.jar"/>
-		</fileset>
-		
 	</path>
 
 
 	<target name="usage">
 
 		<echo message=""/>
-		<echo message="Petclinic build file"/>
+		<echo message="PetClinic build file"/>
 		<echo message="------------------------------------------------------"/>
 		<echo message=""/>
 		<echo message="Available targets are:"/>
@@ -89,13 +57,13 @@
 		<echo message="warfile  --> Build the web application archive"/>
 		<echo message="setupDB  --> Initialize the database"/>
 		<echo message="test     --> Run tests using initialized database"/>
-		<echo message="all      --> Clean, build, docs, warfile, test"/>
+		<echo message="all      --> Clean,build,warfile,docs,test"/>
 		<echo message=""/>
 
 	</target>
 
 
-	<target name="clean" description="Clean output dirs (build, docs, testbuild, testreports, weblib, dist)">
+	<target name="clean" description="Clean output dirs (build, dist, testbuild, weblib)">
 
 		<delete dir="${build.dir}"/>
 		<delete dir="${docs.dir}"/>
@@ -117,51 +85,25 @@
 			<classpath refid="master-classpath"/>
 		</javac>
 
-		<copy todir="${build.dir}" preservelastmodified="true">
-			<fileset dir="${src.dir}">
-				<include name="**/*.xml"/>
-			</fileset>
-		</copy>
-
 		<mkdir dir="${weblib.dir}"/>
 
-		<jar jarfile="${weblib.dir}/${name}.jar" compress="true" basedir="${build.dir}"/>
+		<jar jarfile="${weblib.dir}/petclinic.jar" compress="true" basedir="${build.dir}"/>
 
 		<copy todir="${weblib.dir}" preservelastmodified="true">
-			<fileset dir="${db.dir}/mysql">
+			<fileset dir="${lib.dir}">
+				<include name="hsqldb.jar"/>
 				<include name="mysql*.jar"/>
 			</fileset>
-			<fileset dir="${spring.root}/lib/aopalliance">
-				<include name="aopalliance.jar"/>
-			</fileset>
-			<fileset dir="${spring.root}/lib/cglib">
-				<include name="asm.jar"/>
-				<include name="cglib*.jar"/>
-			</fileset>
-			<fileset dir="${spring.root}/lib/dom4j">
-				<include name="dom4j.jar"/>
-			</fileset>
-			<fileset dir="${spring.root}/lib/hsqldb">
-				<include name="hsqldb.jar"/>
-			</fileset>
-			<fileset dir="${spring.root}/lib/hibernate">
-				<include name="ehcache.jar"/>
-				<include name="hibernate2.jar"/>
-				<include name="odmg.jar"/>
-			</fileset>
-			<fileset dir="${spring.root}/lib/j2ee">
+			<fileset dir="${spring.root}/lib/jstl">
 				<include name="jstl.jar"/>
-				<include name="jta.jar"/>
-			</fileset>
-			<fileset dir="${spring.root}/lib/jakarta-commons">
-				<include name="commons-collections.jar"/>
-				<include name="commons-logging.jar"/>
-			</fileset>
-			<fileset dir="${spring.root}/lib/jakarta-taglibs">
 				<include name="standard.jar"/>
 			</fileset>
+			<fileset dir="${spring.root}/lib/log4j">
+				<include name="commons-logging.jar"/>
+				<include name="log4j*.jar"/>
+			</fileset>
 			<fileset dir="${spring.root}/dist">
-				<include name="spring.jar"/>
+				<include name="spring-full*.jar"/>
 			</fileset>
 		</copy>
 
@@ -174,24 +116,13 @@
 
 		<mkdir dir="${docs.dir}"/>
 
-		<javadoc sourcepath="${src.dir}" destdir="${docs.dir}" packagenames="*" private="true"
-			author="true" version="true" use="true" windowtitle="Petclinic">
-			<doctitle><![CDATA[<h1>Petclinic</h1>]]></doctitle>
-			<bottom><![CDATA[<i>Ken Krebs and Spring contributors 2003.</i>]]></bottom>
+		<javadoc sourcepath="${src.dir}" destdir="${docs.dir}" packagenames="*" private="true">
 			<classpath refid="master-classpath"/>
 		</javadoc>
 
 	</target>
 
 
-	<target name="dist" depends="warfile">
-		<!-- 
-			delegate to warfile target by depending on it.  dist is just to offer
-			a generic target name across all Spring sample apps that may be used
-			for autobuilds testing
-		-->
-	</target>
-	
 	<target name="warfile" depends="build,docs" description="Build the web application archive">
 
 		<mkdir dir="${dist.dir}"/>
@@ -200,10 +131,9 @@
 			<include name="*"/>
 			<include name="docs/**"/>
 			<include name="html/**"/>
-			<include name="WEB-INF/applicationContext*.xml"/>
+			<include name="WEB-INF/applicationContext.xml"/>
 			<include name="WEB-INF/petclinic-servlet.xml"/>
-			<include name="WEB-INF/jboss-web.xml"/>
-			<include name="WEB-INF/*.properties"/>
+			<include name="WEB-INF/i21.tld"/>
 			<include name="WEB-INF/classes/*.properties"/>
 			<include name="WEB-INF/lib/**"/>
 			<include name="WEB-INF/jsp/**"/>
@@ -255,22 +185,13 @@
 			<classpath path="${spring.root}/lib/junit/junit.jar"/>
 		</javac>
 
-		<copy todir="${testbuild.dir}" preservelastmodified="true">
-			<fileset dir="${testsrc.dir}">
-				<include name="**/*.xml"/>
-			</fileset>
-		</copy>
-
 		<junit printsummary="true" fork="yes">
 			<formatter type="xml"/>
-			<test name="org.springframework.samples.petclinic.OwnerTests" todir="${testreports.dir}"/>
-			<test name="org.springframework.samples.petclinic.jdbc.JdbcClinicTests" todir="${testreports.dir}"/>
-			<test name="org.springframework.samples.petclinic.hibernate.HibernateClinicTests" todir="${testreports.dir}"/>
+			<test name="petclinic.ClinicImplTest" todir="${testreports.dir}"/>
 			<classpath path="${build.dir}"/>
 			<classpath path="${testbuild.dir}"/>
 			<classpath path="${testsrc.dir}"/>
 			<classpath refid="master-classpath"/>
-			<classpath refid="test-classpath"/>
 		</junit>
 
 		<junitreport todir="${testhtml.dir}">
@@ -285,7 +206,6 @@
 
 	</target>
 
-
-	<target name="all" depends="clean,build,docs,warfile,test" description="Clean,build,docs,warfile,test"/>
+	<target name="all" depends="clean,build,warfile,docs,test" description="Clean,build,warfile,docs,test"/>
 
 </project>
